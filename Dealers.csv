@@ -1,0 +1,31 @@
+DealerID,DealerName,Region,OpeningDate,TotalSales,DealerType,StaffCount
+1,Kelley-Williams,South,2020-03-28,462,Multi-brand,24
+2,Lee-Horton,West,2013-09-01,87,Exclusive,15
+3,"Martin, Tate and Price",West,2022-01-14,262,Multi-brand,34
+4,Buchanan and Sons,South,2015-01-04,224,Exclusive,25
+5,Rodriguez Inc,East,2011-03-06,425,Multi-brand,30
+6,Woods-Walker,South,2018-10-04,439,Multi-brand,37
+7,Mckenzie and Sons,North,2020-03-12,213,Exclusive,34
+8,Neal Inc,North,2019-02-05,186,Multi-brand,20
+9,Blankenship-Blair,South,2022-02-26,99,Exclusive,23
+10,Mcneil LLC,West,2011-04-12,492,Multi-brand,20
+11,Sanders-Perkins,South,2017-05-26,466,Multi-brand,41
+12,Hall-Love,East,2015-05-18,147,Exclusive,36
+13,Jones-Pierce,West,2017-08-11,305,Multi-brand,36
+14,Carroll Group,North,2016-12-18,96,Multi-brand,37
+15,"Cook, Moore and Wright",West,2018-02-11,173,Exclusive,42
+16,Dillon-Austin,East,2015-09-17,74,Exclusive,23
+17,Powell LLC,West,2011-12-06,355,Multi-brand,23
+18,"Jones, Gibson and Johnson",North,2021-10-29,483,Exclusive,32
+19,Montgomery Ltd,South,2013-08-26,185,Multi-brand,30
+20,Small Ltd,East,2016-07-30,73,Multi-brand,8
+21,"Carpenter, Garcia and Smith",South,2019-09-17,235,Multi-brand,9
+22,"Hutchinson, Black and Murray",West,2015-06-16,308,Multi-brand,40
+23,Chavez PLC,East,2011-10-02,472,Exclusive,13
+24,Patel-Jackson,North,2015-11-04,251,Multi-brand,26
+25,Benitez-Flores,East,2014-10-29,436,Exclusive,17
+26,Durham Inc,West,2019-04-01,306,Exclusive,7
+27,Garcia-Donovan,North,2018-06-21,120,Multi-brand,35
+28,Brooks Group,West,2016-08-26,126,Exclusive,25
+29,Wood-Smith,East,2019-12-18,133,Multi-brand,44
+30,Marsh PLC,East,2024-09-30,353,Multi-brand,37
