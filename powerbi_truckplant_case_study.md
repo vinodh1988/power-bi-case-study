@@ -1,72 +1,46 @@
 ﻿# Power BI Case Study: Truck Plant Dataset Analysis
 
-## Objective
+## Goal
 
-Create a detailed Power BI report for the truck manufacturing dataset using simple, native Power BI features. The report should help business users analyze production, sales, service, dealers, customers, truck models, and customer feedback without writing complex DAX.
+Build a 5-page Power BI report for the truck plant dataset. The report must use only native Power BI visuals, slicers, filters, drill-down, drill-through, and simple visual aggregations.
 
-Use only:
+Do not use Python, R, Copilot, Q&A, Smart Narrative, Key Influencers, AI Insights, text analytics, machine learning, or external scripts.
 
-- CSV import
-- Power Query data type cleanup
-- Basic relationships
-- Standard Power BI visuals
-- Built-in visual aggregations such as Sum, Average, Count, Distinct count, Minimum, and Maximum
-- Simple slicers and filters
-- Drill-down on dates and categories
-- Optional drill-through pages
-- Optional report page tooltips
-- Conditional formatting in tables and matrices
+Avoid complex DAX measures. Use the built-in aggregation options inside visuals: `Sum`, `Average`, `Count`, `Distinct count`, `Minimum`, and `Maximum`.
 
-Avoid:
+The final report must contain exactly these 5 pages:
 
-- Complex DAX measures
-- Advanced calculated tables
-- Complex calculated columns
-- Python visuals
-- R visuals
-- Power BI Copilot
-- Q&A visual
-- Smart Narrative visual
-- Key Influencers visual
-- AI Insights
-- Text analytics
-- Machine learning models
-- External scripts
+1. `Executive Overview`
+2. `Sales and Customers`
+3. `Production Operations`
+4. `Service and Feedback`
+5. `Dealer and Truck Detail`
 
 ## Dataset Files
 
-| File | Purpose |
+Load these 8 CSV files into Power BI Desktop:
+
+| File | Main Use |
 |---|---|
-| `Customers.csv` | Customer details such as industry, region, company size, fleet size, customer type, and account start date |
-| `Trucks.csv` | Truck details such as model, truck type, engine type, fuel type, plant, capacity, warranty, and base price |
-| `Dealers.csv` | Dealer details such as region, dealer type, staff count, opening date, and total sales indicator |
-| `DateTable.csv` | Calendar table for year, quarter, month, week, and day analysis |
-| `Production.csv` | Production records by truck, plant, date, quantity, cost, shift, supervisor, and machine line |
-| `Sales.csv` | Sales transactions by truck, customer, dealer, date, price, channel, region, and payment type |
-| `Service.csv` | Service records by truck, dealer, date, service type, cost, feedback score, downtime, and part replaced |
-| `CustomerFeedback.csv` | Customer feedback by customer, truck, date, rating, satisfaction, recommendation score, and comment |
+| `Customers.csv` | Customer profile, region, industry, company size, fleet size, customer type |
+| `Trucks.csv` | Truck model, truck type, engine, fuel, plant, capacity, warranty, base price |
+| `Dealers.csv` | Dealer name, region, dealer type, staff count, opening date |
+| `DateTable.csv` | Calendar fields for year, quarter, month, week, and day |
+| `Production.csv` | Production date, plant, quantity, cost, shift, machine line, supervisor |
+| `Sales.csv` | Sale date, sale price, customer, truck, dealer, region, payment, channel |
+| `Service.csv` | Service date, service type, cost, dealer, feedback score, downtime, part replaced |
+| `CustomerFeedback.csv` | Rating, delivery satisfaction, support satisfaction, recommendation, comments |
 
-## Business Questions
+## Part 1: Import the CSV Files
 
-The report should answer these questions:
-
-1. Which truck types and models generate the most sales revenue?
-2. Which regions and dealers have the strongest sales performance?
-3. Which plants produce the most trucks?
-4. Which shifts and machine lines are most active?
-5. Which truck types or plants have higher production cost?
-6. Which customer industries and company sizes buy the most trucks?
-7. Which service types happen most often?
-8. Which replaced parts create the highest service cost or downtime?
-9. Which truck types receive the best customer ratings?
-10. Which dealers or truck models need follow-up because sales are strong but service or feedback is weak?
-
-## Import Steps
+Follow these exact steps:
 
 1. Open Power BI Desktop.
-2. Select `Get Data` > `Text/CSV`.
-3. Import these 8 files:
-   - `Customers.csv`
+2. Select `Home` > `Get Data` > `Text/CSV`.
+3. Choose `Customers.csv`.
+4. Confirm the preview shows column headers correctly.
+5. Select `Load` or `Transform Data`.
+6. Repeat the same process for all remaining CSV files:
    - `Trucks.csv`
    - `Dealers.csv`
    - `DateTable.csv`
@@ -74,30 +48,136 @@ The report should answer these questions:
    - `Sales.csv`
    - `Service.csv`
    - `CustomerFeedback.csv`
-4. Select `Transform Data`.
-5. Confirm that Power BI has used the first row as headers.
-6. Set data types in Power Query.
-7. Select `Close & Apply`.
+7. After all files are selected, open `Transform Data` if Power Query is not already open.
 
-## Data Type Setup
+## Part 2: Set Data Types in Power Query
 
-Use these simple rules:
+In Power Query, select each table and set data types exactly as below.
 
-| Field Type | Power BI Data Type | Examples |
-|---|---|---|
-| ID columns | Whole Number | `CustomerID`, `TruckID`, `DealerID`, `SaleID` |
-| Date columns | Date | `SaleDate`, `ProductionDate`, `ServiceDate`, `FeedbackDate` |
-| Money columns | Decimal Number | `SalePrice`, `BasePrice`, `ProductionCost`, `ServiceCost` |
-| Quantity and score columns | Whole Number | `QuantityProduced`, `FleetSize`, `Rating`, `DowntimeDays` |
-| Names and categories | Text | `TruckType`, `Region`, `DealerName`, `Comments` |
+### Customers
 
-After changing data types, scan each query for obvious errors. If any column shows conversion errors, correct the data type before loading.
+| Column | Type |
+|---|---|
+| `CustomerID` | Whole Number |
+| `CustomerName` | Text |
+| `IndustryType` | Text |
+| `Region` | Text |
+| `CompanySize` | Text |
+| `AccountSince` | Date |
+| `FleetSize` | Whole Number |
+| `CustomerType` | Text |
+| `Contact` | Text |
 
-## Relationship Setup
+### Trucks
 
-Open Model view and create these relationships.
+| Column | Type |
+|---|---|
+| `TruckID` | Whole Number |
+| `ModelName` | Text |
+| `TruckType` | Text |
+| `EngineType` | Text |
+| `FuelType` | Text |
+| `LaunchDate` | Date |
+| `BasePrice` | Decimal Number |
+| `Color` | Text |
+| `CapacityTons` | Whole Number |
+| `Plant` | Text |
+| `WarrantyMonths` | Whole Number |
 
-| Table | Column | Related Table | Related Column | Type |
+### Dealers
+
+| Column | Type |
+|---|---|
+| `DealerID` | Whole Number |
+| `DealerName` | Text |
+| `Region` | Text |
+| `OpeningDate` | Date |
+| `TotalSales` | Whole Number |
+| `DealerType` | Text |
+| `StaffCount` | Whole Number |
+
+### DateTable
+
+| Column | Type |
+|---|---|
+| `Date` | Date |
+| `Year` | Whole Number |
+| `Month` | Whole Number |
+| `Day` | Whole Number |
+| `DayOfWeek` | Whole Number |
+| `DayName` | Text |
+| `MonthName` | Text |
+| `Quarter` | Text |
+| `WeekOfYear` | Whole Number |
+
+### Production
+
+| Column | Type |
+|---|---|
+| `ProductionID` | Whole Number |
+| `TruckID` | Whole Number |
+| `Plant` | Text |
+| `ProductionDate` | Date |
+| `QuantityProduced` | Whole Number |
+| `ProductionCost` | Decimal Number |
+| `Shift` | Text |
+| `Supervisor` | Text |
+| `MachineUsed` | Text |
+
+### Sales
+
+| Column | Type |
+|---|---|
+| `SaleID` | Whole Number |
+| `TruckID` | Whole Number |
+| `CustomerID` | Whole Number |
+| `SaleDate` | Date |
+| `SalePrice` | Decimal Number |
+| `DealerID` | Whole Number |
+| `Region` | Text |
+| `PaymentType` | Text |
+| `Financing` | Text |
+| `SalesChannel` | Text |
+
+### Service
+
+| Column | Type |
+|---|---|
+| `ServiceID` | Whole Number |
+| `TruckID` | Whole Number |
+| `ServiceDate` | Date |
+| `ServiceType` | Text |
+| `ServiceCost` | Decimal Number |
+| `DealerID` | Whole Number |
+| `FeedbackScore` | Whole Number |
+| `DowntimeDays` | Whole Number |
+| `PartReplaced` | Text |
+
+### CustomerFeedback
+
+| Column | Type |
+|---|---|
+| `FeedbackID` | Whole Number |
+| `CustomerID` | Whole Number |
+| `TruckID` | Whole Number |
+| `FeedbackDate` | Date |
+| `Rating` | Whole Number |
+| `Comments` | Text |
+| `DeliverySatisfaction` | Whole Number |
+| `SupportSatisfaction` | Whole Number |
+| `LikelihoodToRecommend` | Whole Number |
+
+After setting data types:
+
+1. Select `Close & Apply`.
+2. Wait for Power BI to load all tables.
+3. Save the file as `TruckPlant_CaseStudy.pbix`.
+
+## Part 3: Create Relationships
+
+Open `Model view` and create the relationships below. Use `Single` cross-filter direction for all relationships.
+
+| From Table | From Column | To Table | To Column | Cardinality |
 |---|---|---|---|---|
 | `DateTable` | `Date` | `Sales` | `SaleDate` | One-to-many |
 | `DateTable` | `Date` | `Production` | `ProductionDate` | One-to-many |
@@ -112,298 +192,517 @@ Open Model view and create these relationships.
 | `Dealers` | `DealerID` | `Sales` | `DealerID` | One-to-many |
 | `Dealers` | `DealerID` | `Service` | `DealerID` | One-to-many |
 
-Recommended settings:
+Then mark the date table:
 
-- Cardinality: One-to-many.
-- Cross filter direction: Single.
-- Keep all four fact tables separate: `Sales`, `Production`, `Service`, and `CustomerFeedback`.
-- Mark `DateTable` as the date table using `Table tools` > `Mark as date table` > choose `Date`.
+1. Select `DateTable`.
+2. Go to `Table tools`.
+3. Select `Mark as date table`.
+4. Choose `DateTable[Date]`.
+5. Confirm.
 
-## Simple Calculations Only
+## Part 4: Use Simple Aggregations Instead of Measures
 
-This report can be built without creating formal DAX measures. Use visual-level aggregation instead.
+Do not create a measure table. For each visual, drag the field into the visual and set the summarization.
 
-In each visual, Power BI can summarize numeric columns automatically:
+Use this guide:
 
-| Business Metric | How to Create It in a Visual |
-|---|---|
-| Sales revenue | Drag `Sales[SalePrice]` into Values and set aggregation to `Sum` |
-| Number of sales | Drag `Sales[SaleID]` into Values and set aggregation to `Count` |
-| Average sale price | Drag `Sales[SalePrice]` into Values and set aggregation to `Average` |
-| Production quantity | Drag `Production[QuantityProduced]` into Values and set aggregation to `Sum` |
-| Production cost | Drag `Production[ProductionCost]` into Values and set aggregation to `Sum` or `Average` |
-| Number of production records | Drag `Production[ProductionID]` into Values and set aggregation to `Count` |
-| Service cost | Drag `Service[ServiceCost]` into Values and set aggregation to `Sum` or `Average` |
-| Number of service events | Drag `Service[ServiceID]` into Values and set aggregation to `Count` |
-| Average service score | Drag `Service[FeedbackScore]` into Values and set aggregation to `Average` |
-| Average downtime | Drag `Service[DowntimeDays]` into Values and set aggregation to `Average` |
-| Feedback count | Drag `CustomerFeedback[FeedbackID]` into Values and set aggregation to `Count` |
-| Average rating | Drag `CustomerFeedback[Rating]` into Values and set aggregation to `Average` |
-| Average recommendation | Drag `CustomerFeedback[LikelihoodToRecommend]` into Values and set aggregation to `Average` |
-| Number of customers | Drag `Customers[CustomerID]` into Values and set aggregation to `Distinct count` |
-| Number of truck models | Drag `Trucks[TruckID]` into Values and set aggregation to `Distinct count` |
+| Metric Needed | Field to Drag | Summarization |
+|---|---|---|
+| Sales revenue | `Sales[SalePrice]` | Sum |
+| Number of sales | `Sales[SaleID]` | Count |
+| Average sale price | `Sales[SalePrice]` | Average |
+| Production quantity | `Production[QuantityProduced]` | Sum |
+| Production cost | `Production[ProductionCost]` | Sum |
+| Average production cost | `Production[ProductionCost]` | Average |
+| Number of production records | `Production[ProductionID]` | Count |
+| Service cost | `Service[ServiceCost]` | Sum |
+| Average service cost | `Service[ServiceCost]` | Average |
+| Number of service events | `Service[ServiceID]` | Count |
+| Average service score | `Service[FeedbackScore]` | Average |
+| Average downtime | `Service[DowntimeDays]` | Average |
+| Feedback responses | `CustomerFeedback[FeedbackID]` | Count |
+| Average rating | `CustomerFeedback[Rating]` | Average |
+| Average delivery satisfaction | `CustomerFeedback[DeliverySatisfaction]` | Average |
+| Average support satisfaction | `CustomerFeedback[SupportSatisfaction]` | Average |
+| Average recommendation score | `CustomerFeedback[LikelihoodToRecommend]` | Average |
+| Customer count | `Customers[CustomerID]` | Distinct count |
+| Truck model count | `Trucks[TruckID]` | Distinct count |
 
 ## Optional Simple Calculated Columns
 
-Calculated columns are optional. Use them only if they make visuals easier to read.
+These columns are optional. Add them only if you want easier grouping in visuals.
 
-### Customer Account Age Group
+### Optional Column 1: Price Band
 
-Create this in `Customers` if you want to group customers by account age:
-
-```DAX
-Account Age Group =
-VAR YearsOld = DATEDIFF(Customers[AccountSince], TODAY(), YEAR)
-RETURN
-SWITCH(
-    TRUE(),
-    YearsOld <= 2, "0-2 Years",
-    YearsOld <= 5, "3-5 Years",
-    YearsOld <= 8, "6-8 Years",
-    "9+ Years"
-)
-```
-
-Simpler alternative: skip this column and use `Customers[AccountSince]` directly in visuals or filters.
-
-### Truck Price Band
-
-Create this in `Trucks` if you want easy price grouping:
+Create in `Trucks`:
 
 ```DAX
 Price Band =
 SWITCH(
     TRUE(),
-    Trucks[BasePrice] < 75000, "Low",
-    Trucks[BasePrice] < 120000, "Mid",
-    "High"
+    Trucks[BasePrice] < 75000, "Low Price",
+    Trucks[BasePrice] < 120000, "Mid Price",
+    "High Price"
 )
 ```
 
-### Service Downtime Group
+Use this in slicers or bar charts.
 
-Create this in `Service` if you want simple downtime categories:
+### Optional Column 2: Downtime Group
+
+Create in `Service`:
 
 ```DAX
 Downtime Group =
 SWITCH(
     TRUE(),
-    Service[DowntimeDays] <= 1, "Low",
-    Service[DowntimeDays] <= 3, "Medium",
-    "High"
+    Service[DowntimeDays] <= 1, "Low Downtime",
+    Service[DowntimeDays] <= 3, "Medium Downtime",
+    "High Downtime"
 )
 ```
 
-If you want the simplest possible build, do not create these columns. The full report can still be completed using only existing columns and built-in visual aggregations.
+Use this for service quality visuals.
 
-## Report Pages
+If you want the simplest report, skip both calculated columns.
 
-Create these pages:
+# Report Page 1: Executive Overview
 
-1. Executive Overview
-2. Sales Analysis
-3. Production Analysis
-4. Dealer and Region Analysis
-5. Customer Analysis
-6. Service Analysis
-7. Feedback Analysis
-8. Truck Model Detail
-9. Detail Tables
+## Purpose
 
-Keep the layout simple:
+This page gives the management team a one-screen summary of sales, production, service, and customer satisfaction.
 
-- Place slicers at the top or left.
-- Place KPI cards near the top.
-- Place trend charts in the middle.
-- Place ranked tables or detail visuals near the bottom.
+## Page Setup
 
-## Page 1: Executive Overview
+1. Rename Page 1 to `Executive Overview`.
+2. Open `Format page`.
+3. Set canvas size to `16:9`.
+4. Add a page title text box: `Executive Overview`.
+5. Place slicers in a horizontal row below the title.
+6. Place KPI cards under the slicers.
+7. Place charts below the KPI cards.
 
-### Purpose
+## Slicers
 
-Give a quick summary of the whole business.
+Create these slicers:
 
-### Slicers
+### Slicer 1: Year
 
-Add these slicers:
+1. Add a slicer visual.
+2. Drag `DateTable[Year]` into Field.
+3. Set style to Dropdown.
+4. Turn on Single select only if you want one year at a time.
 
-- `DateTable[Year]`
-- `DateTable[Quarter]`
-- `Sales[Region]`
-- `Trucks[TruckType]`
-- `Trucks[Plant]`
+### Slicer 2: Quarter
 
-### KPI Cards
+1. Add a slicer visual.
+2. Drag `DateTable[Quarter]` into Field.
+3. Set style to Dropdown.
 
-Create cards using these fields and aggregations:
+### Slicer 3: Truck Type
 
-| Card | Field | Aggregation |
-|---|---|---|
-| Total Sales Revenue | `Sales[SalePrice]` | Sum |
-| Sales Transactions | `Sales[SaleID]` | Count |
-| Quantity Produced | `Production[QuantityProduced]` | Sum |
-| Production Cost | `Production[ProductionCost]` | Sum |
-| Service Events | `Service[ServiceID]` | Count |
-| Average Rating | `CustomerFeedback[Rating]` | Average |
-| Average Service Score | `Service[FeedbackScore]` | Average |
-| Average Recommendation | `CustomerFeedback[LikelihoodToRecommend]` | Average |
+1. Add a slicer visual.
+2. Drag `Trucks[TruckType]` into Field.
+3. Set style to Tile or Dropdown.
 
-### Visual 1: Sales Revenue Trend
+### Slicer 4: Plant
+
+1. Add a slicer visual.
+2. Drag `Trucks[Plant]` into Field.
+3. Set style to Dropdown.
+
+### Slicer 5: Region
+
+1. Add a slicer visual.
+2. Drag `Sales[Region]` into Field.
+3. Set style to Dropdown.
+
+## KPI Cards
+
+Create 8 card visuals.
+
+### Card 1: Sales Revenue
+
+1. Insert a Card visual.
+2. Drag `Sales[SalePrice]` into Data.
+3. In the field dropdown, choose `Sum`.
+4. Rename the visual title to `Total Sales Revenue`.
+5. Format as currency.
+
+### Card 2: Sales Count
+
+1. Insert a Card visual.
+2. Drag `Sales[SaleID]` into Data.
+3. Choose `Count`.
+4. Title: `Sales Transactions`.
+
+### Card 3: Production Quantity
+
+1. Insert a Card visual.
+2. Drag `Production[QuantityProduced]` into Data.
+3. Choose `Sum`.
+4. Title: `Quantity Produced`.
+
+### Card 4: Production Cost
+
+1. Insert a Card visual.
+2. Drag `Production[ProductionCost]` into Data.
+3. Choose `Sum`.
+4. Title: `Production Cost`.
+5. Format as currency.
+
+### Card 5: Service Events
+
+1. Insert a Card visual.
+2. Drag `Service[ServiceID]` into Data.
+3. Choose `Count`.
+4. Title: `Service Events`.
+
+### Card 6: Average Rating
+
+1. Insert a Card visual.
+2. Drag `CustomerFeedback[Rating]` into Data.
+3. Choose `Average`.
+4. Title: `Average Customer Rating`.
+5. Set decimal places to 1 or 2.
+
+### Card 7: Average Service Score
+
+1. Insert a Card visual.
+2. Drag `Service[FeedbackScore]` into Data.
+3. Choose `Average`.
+4. Title: `Average Service Score`.
+
+### Card 8: Average Recommendation
+
+1. Insert a Card visual.
+2. Drag `CustomerFeedback[LikelihoodToRecommend]` into Data.
+3. Choose `Average`.
+4. Title: `Average Recommendation Score`.
+
+## Visual 1: Sales Revenue Trend
 
 Visual type: Line chart
 
-- X-axis: `DateTable[Date]`
-- Y-axis: `Sales[SalePrice]`, Sum
-- Legend: `DateTable[Year]`
+Steps:
 
-Use the date hierarchy to drill from year to quarter to month.
+1. Insert a Line chart.
+2. Drag `DateTable[Date]` to X-axis.
+3. Drag `Sales[SalePrice]` to Y-axis.
+4. Set `Sales[SalePrice]` summarization to `Sum`.
+5. Drag `DateTable[Year]` to Legend.
+6. Turn on data labels if the chart is readable.
+7. Title the visual `Sales Revenue Trend`.
+8. Use the date drill controls to move between Year, Quarter, Month, and Day.
 
-### Visual 2: Revenue by Truck Type
+What to observe:
+
+- Years with increasing or declining sales revenue.
+- Quarters with unusually high or low revenue.
+- Whether selected truck types or regions change the trend.
+
+## Visual 2: Revenue by Truck Type
 
 Visual type: Clustered bar chart
 
-- Y-axis: `Trucks[TruckType]`
-- X-axis: `Sales[SalePrice]`, Sum
-- Tooltips:
-  - `Sales[SaleID]`, Count
-  - `Sales[SalePrice]`, Average
-  - `CustomerFeedback[Rating]`, Average
+Steps:
 
-### Visual 3: Production Quantity by Plant
+1. Insert a Clustered bar chart.
+2. Drag `Trucks[TruckType]` to Y-axis.
+3. Drag `Sales[SalePrice]` to X-axis.
+4. Set `Sales[SalePrice]` to `Sum`.
+5. Add tooltips:
+   - `Sales[SaleID]`, Count
+   - `Sales[SalePrice]`, Average
+   - `CustomerFeedback[Rating]`, Average
+6. Sort descending by Sum of `SalePrice`.
+7. Title the visual `Revenue by Truck Type`.
+
+What to observe:
+
+- Which truck type produces the most revenue.
+- Whether the leader changes after filtering by year, region, or plant.
+
+## Visual 3: Production by Plant
 
 Visual type: Clustered column chart
 
-- X-axis: `Trucks[Plant]`
-- Y-axis: `Production[QuantityProduced]`, Sum
-- Tooltips:
-  - `Production[ProductionCost]`, Sum
-  - `Production[ProductionCost]`, Average
+Steps:
 
-### Visual 4: Service Events by Service Type
+1. Insert a Clustered column chart.
+2. Drag `Trucks[Plant]` or `Production[Plant]` to X-axis.
+3. Drag `Production[QuantityProduced]` to Y-axis.
+4. Set `QuantityProduced` to `Sum`.
+5. Add tooltips:
+   - `Production[ProductionCost]`, Sum
+   - `Production[ProductionCost]`, Average
+   - `Production[ProductionID]`, Count
+6. Title the visual `Production Quantity by Plant`.
 
-Visual type: Column chart
+What to observe:
 
-- X-axis: `Service[ServiceType]`
-- Y-axis: `Service[ServiceID]`, Count
-- Tooltips:
-  - `Service[ServiceCost]`, Average
-  - `Service[DowntimeDays]`, Average
-  - `Service[FeedbackScore]`, Average
+- Plant with highest total production.
+- Whether a high-production plant also has high production cost.
 
-### Insights to Capture
+## Visual 4: Service Events by Type
 
-- Highest revenue truck type.
-- Highest production plant.
+Visual type: Clustered column chart
+
+Steps:
+
+1. Insert a Clustered column chart.
+2. Drag `Service[ServiceType]` to X-axis.
+3. Drag `Service[ServiceID]` to Y-axis.
+4. Set `ServiceID` to `Count`.
+5. Add tooltips:
+   - `Service[ServiceCost]`, Average
+   - `Service[DowntimeDays]`, Average
+   - `Service[FeedbackScore]`, Average
+6. Title the visual `Service Events by Type`.
+
+What to observe:
+
 - Most common service type.
-- Overall average rating and recommendation level.
-- Any year or quarter where sales look unusually high or low.
+- Whether one type has higher average cost or downtime.
 
-## Page 2: Sales Analysis
+## Visual 5: Average Feedback by Plant and Truck Type
 
-### Purpose
+Visual type: Matrix
 
-Understand where revenue comes from and how sales differ by region, dealer, truck type, channel, and payment method.
+Steps:
 
-### Slicers
+1. Insert a Matrix visual.
+2. Drag `Trucks[Plant]` to Rows.
+3. Drag `Trucks[TruckType]` to Columns.
+4. Drag `CustomerFeedback[Rating]` to Values.
+5. Set summarization to `Average`.
+6. Drag `CustomerFeedback[LikelihoodToRecommend]` to Values.
+7. Set summarization to `Average`.
+8. Apply conditional formatting:
+   - Select the dropdown beside Average of Rating.
+   - Choose Conditional formatting > Background color.
+   - Use lower values as red and higher values as green.
+9. Title the visual `Feedback by Plant and Truck Type`.
+
+What to observe:
+
+- Plant and truck type combinations with weak feedback.
+- Combinations with strong rating and recommendation.
+
+## Page 1 Required Insights
+
+Write short notes for these items:
+
+1. Highest revenue truck type.
+2. Highest production plant.
+3. Most common service type.
+4. Overall average customer rating.
+5. Any major mismatch between strong sales and weak rating.
+
+# Report Page 2: Sales and Customers
+
+## Purpose
+
+This page explains who is buying trucks, what they are buying, where sales happen, and which customer segments produce the most revenue.
+
+## Page Setup
+
+1. Create a new page.
+2. Rename it `Sales and Customers`.
+3. Place slicers on the left side.
+4. Place sales visuals on the top half.
+5. Place customer visuals on the bottom half.
+
+## Slicers
+
+Create these slicers:
 
 - `DateTable[Year]`
-- `DateTable[Quarter]`
 - `Sales[Region]`
 - `Trucks[TruckType]`
 - `Sales[SalesChannel]`
 - `Sales[PaymentType]`
+- `Customers[IndustryType]`
+- `Customers[CompanySize]`
 
-### Visual 1: Revenue by Region
+Use dropdown style for slicers with more than 3 values.
 
-Visual type: Bar chart
+## Visual 1: Revenue by Region
 
-- Y-axis: `Sales[Region]`
-- X-axis: `Sales[SalePrice]`, Sum
-- Tooltips:
-  - `Sales[SaleID]`, Count
-  - `Sales[SalePrice]`, Average
-  - `Customers[CustomerID]`, Distinct count
-
-Sort descending by Sum of `SalePrice`.
-
-### Visual 2: Monthly Revenue Trend
-
-Visual type: Line chart
-
-- X-axis: `DateTable[Date]`
-- Y-axis: `Sales[SalePrice]`, Sum
-- Legend: `Sales[Region]`
-
-Use drill-down to compare year, quarter, and month.
-
-### Visual 3: Truck Type by Sales Channel
-
-Visual type: Matrix
-
-- Rows: `Trucks[TruckType]`
-- Columns: `Sales[SalesChannel]`
-- Values:
-  - `Sales[SalePrice]`, Sum
-  - `Sales[SaleID]`, Count
-  - `Sales[SalePrice]`, Average
-
-Use conditional formatting on Sum of `SalePrice`.
-
-### Visual 4: Payment Type Mix
-
-Visual type: 100% stacked column chart
-
-- X-axis: `Sales[Region]`
-- Legend: `Sales[PaymentType]`
-- Values: `Sales[SaleID]`, Count
-
-### Visual 5: Top 10 Truck Models by Revenue
-
-Visual type: Bar chart
-
-- Y-axis: `Trucks[ModelName]`
-- X-axis: `Sales[SalePrice]`, Sum
-- Tooltips:
-  - `Trucks[TruckType]`
-  - `Trucks[BasePrice]`, Average
-  - `Trucks[CapacityTons]`, Average
-  - `Sales[SalePrice]`, Average
-
-Use the visual-level Top N filter:
-
-1. Add `Trucks[ModelName]` to visual filters.
-2. Change filter type to Top N.
-3. Show Top 10 by Sum of `Sales[SalePrice]`.
-4. Apply filter.
-
-### Visual 6: Sale Price Bands
-
-Visual type: Column chart
+Visual type: Clustered bar chart
 
 Steps:
 
-1. Right-click `Sales[SalePrice]` in the Fields pane.
-2. Select `New group`.
-3. Choose bin size such as 10,000.
-4. Put the Sale Price bin on the X-axis.
-5. Put `Sales[SaleID]`, Count, on the Y-axis.
+1. Insert a Clustered bar chart.
+2. Drag `Sales[Region]` to Y-axis.
+3. Drag `Sales[SalePrice]` to X-axis.
+4. Set `SalePrice` to `Sum`.
+5. Add tooltips:
+   - `Sales[SaleID]`, Count
+   - `Sales[SalePrice]`, Average
+   - `Customers[CustomerID]`, Distinct count
+6. Sort descending by Sum of `SalePrice`.
+7. Title: `Sales Revenue by Region`.
 
-### Insights to Capture
+Insight:
 
-- Best region by revenue.
-- Region with highest number of transactions.
-- Whether dealer or online channel performs better.
-- Whether cash or financing is more common.
-- Top truck models by revenue.
-- Whether revenue is concentrated in expensive trucks or spread across price bands.
+- Identify the strongest and weakest sales regions.
 
-## Page 3: Production Analysis
+## Visual 2: Monthly Revenue by Region
 
-### Purpose
+Visual type: Line chart
 
-Analyze production quantity, production cost, plant activity, shifts, and production lines.
+Steps:
 
-### Slicers
+1. Insert a Line chart.
+2. Drag `DateTable[Date]` to X-axis.
+3. Drag `Sales[SalePrice]` to Y-axis.
+4. Set `SalePrice` to `Sum`.
+5. Drag `Sales[Region]` to Legend.
+6. Title: `Monthly Revenue by Region`.
+7. Use drill-down to inspect Year > Quarter > Month.
+
+Insight:
+
+- Look for region trends and seasonal movement.
+
+## Visual 3: Sales Channel and Truck Type Matrix
+
+Visual type: Matrix
+
+Steps:
+
+1. Insert a Matrix visual.
+2. Drag `Trucks[TruckType]` to Rows.
+3. Drag `Sales[SalesChannel]` to Columns.
+4. Drag `Sales[SalePrice]` to Values and set to `Sum`.
+5. Drag `Sales[SaleID]` to Values and set to `Count`.
+6. Drag `Sales[SalePrice]` to Values a second time and set to `Average`.
+7. Rename the value labels in the visual pane if needed:
+   - Sum of SalePrice = Revenue
+   - Count of SaleID = Sales Count
+   - Average of SalePrice = Avg Sale Price
+8. Apply conditional formatting to Revenue.
+9. Title: `Truck Type by Sales Channel`.
+
+Insight:
+
+- Compare dealer and online sales by truck type.
+
+## Visual 4: Payment Type Mix
+
+Visual type: 100% stacked column chart
+
+Steps:
+
+1. Insert a 100% stacked column chart.
+2. Drag `Sales[Region]` to X-axis.
+3. Drag `Sales[PaymentType]` to Legend.
+4. Drag `Sales[SaleID]` to Y-axis and set to `Count`.
+5. Title: `Payment Mix by Region`.
+
+Insight:
+
+- Identify regions where financing is more common.
+
+## Visual 5: Top 10 Truck Models by Revenue
+
+Visual type: Clustered bar chart
+
+Steps:
+
+1. Insert a Clustered bar chart.
+2. Drag `Trucks[ModelName]` to Y-axis.
+3. Drag `Sales[SalePrice]` to X-axis.
+4. Set `SalePrice` to `Sum`.
+5. Add tooltips:
+   - `Trucks[TruckType]`
+   - `Trucks[BasePrice]`, Average
+   - `Trucks[CapacityTons]`, Average
+   - `Sales[SaleID]`, Count
+   - `CustomerFeedback[Rating]`, Average
+6. In Filters for this visual, add `Trucks[ModelName]`.
+7. Change filter type to `Top N`.
+8. Show items: Top `10`.
+9. By value: drag `Sales[SalePrice]` and set to Sum.
+10. Select `Apply filter`.
+11. Sort descending by Sum of `SalePrice`.
+12. Title: `Top 10 Truck Models by Revenue`.
+
+Insight:
+
+- Identify truck models that drive the most sales.
+
+## Visual 6: Revenue by Customer Industry
+
+Visual type: Clustered bar chart
+
+Steps:
+
+1. Insert a Clustered bar chart.
+2. Drag `Customers[IndustryType]` to Y-axis.
+3. Drag `Sales[SalePrice]` to X-axis.
+4. Set `SalePrice` to `Sum`.
+5. Add tooltips:
+   - `Customers[CustomerID]`, Distinct count
+   - `Sales[SaleID]`, Count
+   - `CustomerFeedback[LikelihoodToRecommend]`, Average
+6. Sort descending by Sum of `SalePrice`.
+7. Title: `Revenue by Customer Industry`.
+
+Insight:
+
+- Identify the customer industry that contributes the most revenue.
+
+## Visual 7: Fleet Size vs Revenue
+
+Visual type: Scatter chart
+
+Steps:
+
+1. Insert a Scatter chart.
+2. Drag `Customers[FleetSize]` to X-axis and set to `Average`.
+3. Drag `Sales[SalePrice]` to Y-axis and set to `Sum`.
+4. Drag `Sales[SaleID]` to Size and set to `Count`.
+5. Drag `Customers[CompanySize]` to Legend.
+6. Drag `Customers[CustomerName]` to Details.
+7. Add tooltip `Customers[IndustryType]`.
+8. Add tooltip `CustomerFeedback[Rating]`, Average.
+9. Title: `Fleet Size vs Revenue`.
+
+Insight:
+
+- Check whether larger fleets are associated with higher revenue.
+
+## Page 2 Required Insights
+
+Write short notes for these items:
+
+1. Best sales region.
+2. Best customer industry.
+3. Most common payment type by region.
+4. Strongest sales channel by truck type.
+5. Top truck model by revenue.
+6. Whether larger fleets appear to buy more.
+
+# Report Page 3: Production Operations
+
+## Purpose
+
+This page explains how much the plants produce, which shifts and machine lines are active, and where production cost is higher.
+
+## Page Setup
+
+1. Create a new page.
+2. Rename it `Production Operations`.
+3. Place slicers at the top.
+4. Place plant-level visuals in the first row.
+5. Place shift and machine-line visuals in the second row.
+6. Place trend and scatter visuals in the lower section.
+
+## Slicers
+
+Create these slicers:
 
 - `DateTable[Year]`
 - `DateTable[Quarter]`
@@ -412,736 +711,697 @@ Analyze production quantity, production cost, plant activity, shifts, and produc
 - `Production[MachineUsed]`
 - `Trucks[TruckType]`
 
-### Visual 1: Quantity Produced by Plant
+## Visual 1: Quantity Produced by Plant
 
-Visual type: Column chart
-
-- X-axis: `Production[Plant]`
-- Y-axis: `Production[QuantityProduced]`, Sum
-- Tooltips:
-  - `Production[ProductionID]`, Count
-  - `Production[ProductionCost]`, Sum
-  - `Production[ProductionCost]`, Average
-
-### Visual 2: Production Cost by Plant
-
-Visual type: Bar chart
-
-- Y-axis: `Production[Plant]`
-- X-axis: `Production[ProductionCost]`, Sum
-- Tooltips:
-  - `Production[QuantityProduced]`, Sum
-  - `Production[ProductionCost]`, Average
-
-### Visual 3: Plant and Shift Matrix
-
-Visual type: Matrix
-
-- Rows: `Production[Plant]`
-- Columns: `Production[Shift]`
-- Values:
-  - `Production[QuantityProduced]`, Sum
-  - `Production[ProductionCost]`, Sum
-  - `Production[ProductionCost]`, Average
-
-Apply conditional formatting to Average of `ProductionCost`.
-
-### Visual 4: Production by Machine Line
-
-Visual type: Stacked bar chart
-
-- Y-axis: `Production[MachineUsed]`
-- X-axis: `Production[QuantityProduced]`, Sum
-- Legend: `Production[Shift]`
-
-### Visual 5: Production Trend
-
-Visual type: Line chart
-
-- X-axis: `DateTable[Date]`
-- Y-axis: `Production[QuantityProduced]`, Sum
-- Legend: `Production[Plant]`
-
-### Visual 6: Capacity vs Production Cost
-
-Visual type: Scatter chart
-
-- X-axis: `Trucks[CapacityTons]`, Average
-- Y-axis: `Production[ProductionCost]`, Average
-- Size: `Production[QuantityProduced]`, Sum
-- Legend: `Trucks[TruckType]`
-- Details: `Trucks[ModelName]`
-
-### Insights to Capture
-
-- Plant with highest production quantity.
-- Plant with highest total production cost.
-- Shift with highest activity.
-- Machine line with highest production quantity.
-- Whether heavier or higher-capacity trucks have higher production cost.
-
-## Page 4: Dealer and Region Analysis
-
-### Purpose
-
-Compare dealers and regions across sales and service performance.
-
-### Slicers
-
-- `Dealers[Region]`
-- `Dealers[DealerType]`
-- `DateTable[Year]`
-- `Sales[SalesChannel]`
-- `Service[ServiceType]`
-
-### Visual 1: Dealer Leaderboard
-
-Visual type: Table
-
-Columns and aggregations:
-
-- `Dealers[DealerName]`
-- `Dealers[Region]`
-- `Dealers[DealerType]`
-- `Dealers[StaffCount]`, Average
-- `Sales[SalePrice]`, Sum
-- `Sales[SaleID]`, Count
-- `Sales[SalePrice]`, Average
-- `Service[ServiceID]`, Count
-- `Service[FeedbackScore]`, Average
-- `Service[DowntimeDays]`, Average
-
-Sort by Sum of `Sales[SalePrice]` descending.
-
-### Visual 2: Revenue by Dealer Type
-
-Visual type: Bar chart
-
-- Y-axis: `Dealers[DealerType]`
-- X-axis: `Sales[SalePrice]`, Sum
-- Tooltips:
-  - `Sales[SaleID]`, Count
-  - `Sales[SalePrice]`, Average
-  - `Service[FeedbackScore]`, Average
-
-### Visual 3: Region and Truck Type Matrix
-
-Visual type: Matrix
-
-- Rows: `Dealers[Region]`
-- Columns: `Trucks[TruckType]`
-- Values:
-  - `Sales[SalePrice]`, Sum
-  - `Sales[SaleID]`, Count
-  - `CustomerFeedback[Rating]`, Average
-
-### Visual 4: Staff Count vs Revenue
-
-Visual type: Scatter chart
-
-- X-axis: `Dealers[StaffCount]`, Average
-- Y-axis: `Sales[SalePrice]`, Sum
-- Size: `Sales[SaleID]`, Count
-- Legend: `Dealers[DealerType]`
-- Details: `Dealers[DealerName]`
-
-### Visual 5: Dealer Service Score
-
-Visual type: Bar chart
-
-- Y-axis: `Dealers[DealerName]`
-- X-axis: `Service[FeedbackScore]`, Average
-- Tooltips:
-  - `Service[ServiceID]`, Count
-  - `Service[DowntimeDays]`, Average
-  - `Service[ServiceCost]`, Sum
-
-Use Top N or Bottom N filters to show best and weakest dealers.
-
-### Insights to Capture
-
-- Best dealers by sales revenue.
-- Dealers with high revenue but lower service score.
-- Dealer type with stronger sales.
-- Regions with the best sales and ratings.
-- Whether staff count appears related to revenue.
-
-## Page 5: Customer Analysis
-
-### Purpose
-
-Analyze which customer groups buy the most and provide the best feedback.
-
-### Slicers
-
-- `Customers[IndustryType]`
-- `Customers[CompanySize]`
-- `Customers[CustomerType]`
-- `Customers[Region]`
-- `DateTable[Year]`
-
-### Visual 1: Revenue by Industry
-
-Visual type: Bar chart
-
-- Y-axis: `Customers[IndustryType]`
-- X-axis: `Sales[SalePrice]`, Sum
-- Tooltips:
-  - `Customers[CustomerID]`, Distinct count
-  - `Sales[SaleID]`, Count
-  - `Sales[SalePrice]`, Average
-
-### Visual 2: Sales by Company Size
-
-Visual type: Column chart
-
-- X-axis: `Customers[CompanySize]`
-- Y-axis: `Sales[SalePrice]`, Sum
-- Tooltips:
-  - `Sales[SaleID]`, Count
-  - `Customers[FleetSize]`, Average
-
-### Visual 3: Customer Type Split
-
-Visual type: 100% stacked column chart
-
-- X-axis: `Customers[IndustryType]`
-- Legend: `Customers[CustomerType]`
-- Values: `Sales[SaleID]`, Count
-
-### Visual 4: Fleet Size vs Revenue
-
-Visual type: Scatter chart
-
-- X-axis: `Customers[FleetSize]`, Average
-- Y-axis: `Sales[SalePrice]`, Sum
-- Size: `Sales[SaleID]`, Count
-- Legend: `Customers[CompanySize]`
-- Details: `Customers[CustomerName]`
-- Tooltips:
-  - `Customers[IndustryType]`
-  - `Customers[CustomerType]`
-  - `CustomerFeedback[Rating]`, Average
-
-### Visual 5: Top Customers Table
-
-Visual type: Table
-
-Columns:
-
-- `Customers[CustomerName]`
-- `Customers[IndustryType]`
-- `Customers[Region]`
-- `Customers[CompanySize]`
-- `Customers[FleetSize]`, Average
-- `Sales[SalePrice]`, Sum
-- `Sales[SaleID]`, Count
-- `CustomerFeedback[Rating]`, Average
-- `CustomerFeedback[LikelihoodToRecommend]`, Average
-
-Sort by Sum of `Sales[SalePrice]` descending.
-
-### Optional Visual: Account Age Group
-
-If you created the optional `Account Age Group` column, use it in a column chart:
-
-- X-axis: `Customers[Account Age Group]`
-- Y-axis: `Sales[SalePrice]`, Sum
-- Tooltips:
-  - `Customers[CustomerID]`, Distinct count
-  - `Sales[SaleID]`, Count
-
-### Insights to Capture
-
-- Highest revenue industry.
-- Customer size group with strongest sales.
-- Whether corporate or individual customers dominate transactions.
-- Whether larger fleet customers create more revenue.
-- Top customers by revenue and their feedback scores.
-
-## Page 6: Service Analysis
-
-### Purpose
-
-Understand service workload, cost, downtime, replacement parts, and service quality.
-
-### Slicers
-
-- `DateTable[Year]`
-- `Service[ServiceType]`
-- `Service[PartReplaced]`
-- `Dealers[Region]`
-- `Trucks[TruckType]`
-- `Trucks[Plant]`
-
-### Visual 1: Service Events by Type
-
-Visual type: Column chart
-
-- X-axis: `Service[ServiceType]`
-- Y-axis: `Service[ServiceID]`, Count
-- Tooltips:
-  - `Service[ServiceCost]`, Average
-  - `Service[DowntimeDays]`, Average
-  - `Service[FeedbackScore]`, Average
-
-### Visual 2: Service Cost by Part Replaced
-
-Visual type: Bar chart
-
-- Y-axis: `Service[PartReplaced]`
-- X-axis: `Service[ServiceCost]`, Sum
-- Tooltips:
-  - `Service[ServiceID]`, Count
-  - `Service[ServiceCost]`, Average
-  - `Service[DowntimeDays]`, Average
-
-### Visual 3: Downtime Distribution
-
-Visual type: Column chart
-
-- X-axis: `Service[DowntimeDays]`
-- Y-axis: `Service[ServiceID]`, Count
-- Legend: `Service[ServiceType]`
-
-### Visual 4: Service Cost Trend
-
-Visual type: Line chart
-
-- X-axis: `DateTable[Date]`
-- Y-axis: `Service[ServiceCost]`, Sum
-- Legend: `Service[ServiceType]`
-
-### Visual 5: Downtime vs Feedback Score
-
-Visual type: Scatter chart
-
-- X-axis: `Service[DowntimeDays]`, Average
-- Y-axis: `Service[FeedbackScore]`, Average
-- Size: `Service[ServiceID]`, Count
-- Legend: `Service[PartReplaced]`
-- Details: `Dealers[DealerName]`
-
-### Visual 6: Service Quality Matrix
-
-Visual type: Matrix
-
-- Rows: `Trucks[TruckType]`
-- Columns: `Service[ServiceType]`
-- Values:
-  - `Service[ServiceID]`, Count
-  - `Service[ServiceCost]`, Average
-  - `Service[DowntimeDays]`, Average
-  - `Service[FeedbackScore]`, Average
-
-Use conditional formatting:
-
-- Highlight high average downtime in red.
-- Highlight low average service score in red.
-- Highlight high average service score in green.
-
-### Insights to Capture
-
-- Most common service type.
-- Most expensive replaced part.
-- Parts linked with higher downtime.
-- Dealers with lower feedback scores.
-- Truck types with frequent or costly service records.
-
-## Page 7: Feedback Analysis
-
-### Purpose
-
-Analyze customer ratings, delivery satisfaction, support satisfaction, recommendation score, and repeated feedback comments.
-
-### Slicers
-
-- `DateTable[Year]`
-- `Trucks[TruckType]`
-- `Trucks[Plant]`
-- `Customers[IndustryType]`
-- `Customers[Region]`
-- `CustomerFeedback[Rating]`
-
-### Visual 1: Average Rating by Truck Type
-
-Visual type: Bar chart
-
-- Y-axis: `Trucks[TruckType]`
-- X-axis: `CustomerFeedback[Rating]`, Average
-- Tooltips:
-  - `CustomerFeedback[FeedbackID]`, Count
-  - `CustomerFeedback[DeliverySatisfaction]`, Average
-  - `CustomerFeedback[SupportSatisfaction]`, Average
-  - `CustomerFeedback[LikelihoodToRecommend]`, Average
-
-### Visual 2: Satisfaction by Plant and Truck Type
-
-Visual type: Matrix
-
-- Rows: `Trucks[Plant]`
-- Columns: `Trucks[TruckType]`
-- Values:
-  - `CustomerFeedback[Rating]`, Average
-  - `CustomerFeedback[DeliverySatisfaction]`, Average
-  - `CustomerFeedback[SupportSatisfaction]`, Average
-  - `CustomerFeedback[LikelihoodToRecommend]`, Average
-
-Apply conditional formatting to identify lower scores.
-
-### Visual 3: Recommendation Score Distribution
-
-Visual type: Column chart
-
-- X-axis: `CustomerFeedback[LikelihoodToRecommend]`
-- Y-axis: `CustomerFeedback[FeedbackID]`, Count
-- Legend: `Trucks[TruckType]`
-
-### Visual 4: Rating by Customer Industry
-
-Visual type: Bar chart
-
-- Y-axis: `Customers[IndustryType]`
-- X-axis: `CustomerFeedback[Rating]`, Average
-- Tooltips:
-  - `CustomerFeedback[FeedbackID]`, Count
-  - `CustomerFeedback[LikelihoodToRecommend]`, Average
-
-### Visual 5: Comment Summary Table
-
-Visual type: Table
-
-Columns:
-
-- `CustomerFeedback[Comments]`
-- `CustomerFeedback[FeedbackID]`, Count
-- `CustomerFeedback[Rating]`, Average
-- `CustomerFeedback[DeliverySatisfaction]`, Average
-- `CustomerFeedback[SupportSatisfaction]`, Average
-- `CustomerFeedback[LikelihoodToRecommend]`, Average
-
-This is not sentiment analysis. Treat each repeated comment as a category and compare its average scores.
-
-### Insights to Capture
-
-- Best-rated truck type.
-- Plant and truck type combinations with weaker feedback.
-- Comments associated with low rating.
-- Industries or regions with higher recommendation score.
-- Whether delivery or support satisfaction appears weaker.
-
-## Page 8: Truck Model Detail
-
-### Purpose
-
-Create a simple drill-through page for one selected truck model.
-
-### Setup
-
-1. Create a page named `Truck Model Detail`.
-2. Add `Trucks[ModelName]` to the Drill-through field well.
-3. Turn on `Keep all filters`.
-4. Add a Back button.
-
-### Visual 1: Model Profile
-
-Visual type: Multi-row card
-
-Fields:
-
-- `Trucks[ModelName]`
-- `Trucks[TruckType]`
-- `Trucks[EngineType]`
-- `Trucks[FuelType]`
-- `Trucks[Plant]`
-- `Trucks[BasePrice]`
-- `Trucks[CapacityTons]`
-- `Trucks[WarrantyMonths]`
-
-### Visual 2: Model Summary Cards
-
-Cards:
-
-- `Sales[SalePrice]`, Sum
-- `Sales[SaleID]`, Count
-- `Production[QuantityProduced]`, Sum
-- `Service[ServiceID]`, Count
-- `Service[ServiceCost]`, Average
-- `Service[DowntimeDays]`, Average
-- `CustomerFeedback[Rating]`, Average
-- `CustomerFeedback[LikelihoodToRecommend]`, Average
-
-### Visual 3: Model Sales Trend
-
-Visual type: Line chart
-
-- X-axis: `DateTable[Date]`
-- Y-axis: `Sales[SalePrice]`, Sum
-
-### Visual 4: Model Service Breakdown
-
-Visual type: Bar chart
-
-- Y-axis: `Service[ServiceType]`
-- X-axis: `Service[ServiceID]`, Count
-- Tooltips:
-  - `Service[ServiceCost]`, Average
-  - `Service[DowntimeDays]`, Average
-
-### Visual 5: Model Feedback Table
-
-Visual type: Table
-
-Columns:
-
-- `CustomerFeedback[Comments]`
-- `CustomerFeedback[FeedbackID]`, Count
-- `CustomerFeedback[Rating]`, Average
-- `CustomerFeedback[LikelihoodToRecommend]`, Average
-
-### Insights to Capture
-
-- Does the model sell well?
-- Does it have many service events?
-- Are service costs or downtime high?
-- Are customer ratings strong?
-- Which comments appear most often for the model?
-
-## Page 9: Detail Tables
-
-### Purpose
-
-Provide record-level tables for simple investigation.
-
-### Sales Detail Table
-
-Columns:
-
-- `Sales[SaleID]`
-- `Sales[SaleDate]`
-- `Trucks[ModelName]`
-- `Trucks[TruckType]`
-- `Customers[CustomerName]`
-- `Dealers[DealerName]`
-- `Sales[Region]`
-- `Sales[SalePrice]`
-- `Sales[PaymentType]`
-- `Sales[SalesChannel]`
-
-### Service Detail Table
-
-Columns:
-
-- `Service[ServiceID]`
-- `Service[ServiceDate]`
-- `Trucks[ModelName]`
-- `Dealers[DealerName]`
-- `Service[ServiceType]`
-- `Service[PartReplaced]`
-- `Service[ServiceCost]`
-- `Service[FeedbackScore]`
-- `Service[DowntimeDays]`
-
-### Feedback Detail Table
-
-Columns:
-
-- `CustomerFeedback[FeedbackID]`
-- `CustomerFeedback[FeedbackDate]`
-- `Customers[CustomerName]`
-- `Trucks[ModelName]`
-- `CustomerFeedback[Rating]`
-- `CustomerFeedback[DeliverySatisfaction]`
-- `CustomerFeedback[SupportSatisfaction]`
-- `CustomerFeedback[LikelihoodToRecommend]`
-- `CustomerFeedback[Comments]`
-
-## Slicers and Filters
-
-Use slicers to let users explore the report without complex logic.
-
-Recommended slicers by theme:
-
-| Theme | Useful Slicers |
-|---|---|
-| Time | `DateTable[Year]`, `DateTable[Quarter]`, `DateTable[MonthName]` |
-| Geography | `Sales[Region]`, `Dealers[Region]`, `Customers[Region]` |
-| Trucks | `Trucks[TruckType]`, `Trucks[Plant]`, `Trucks[FuelType]`, `Trucks[EngineType]` |
-| Customers | `Customers[IndustryType]`, `Customers[CompanySize]`, `Customers[CustomerType]` |
-| Dealers | `Dealers[DealerType]`, `Dealers[DealerName]` |
-| Service | `Service[ServiceType]`, `Service[PartReplaced]`, `Service[DowntimeDays]` |
-| Feedback | `CustomerFeedback[Rating]`, `CustomerFeedback[LikelihoodToRecommend]` |
-
-Keep slicers simple. Do not overcrowd every page. Use 4 to 6 slicers per page at most.
-
-## Drill-down Instructions
-
-Use drill-down mainly on date visuals.
-
-Recommended date drill path:
-
-1. `DateTable[Year]`
-2. `DateTable[Quarter]`
-3. `DateTable[MonthName]`
-4. `DateTable[Date]`
-
-Apply drill-down to:
-
-- Sales revenue trend
-- Production quantity trend
-- Service cost trend
-- Feedback rating trend, if created
-
-How to use drill-down:
-
-1. Start at the yearly view.
-2. Select the drill-down icon on the visual.
-3. Click a year to inspect quarters.
-4. Click a quarter to inspect months.
-5. Use slicers to compare one region, plant, dealer, or truck type at a time.
-
-## Drill-through Instructions
-
-Drill-through is optional but useful. Keep it simple.
-
-Recommended drill-through pages:
-
-| Source Field | Target Page | Purpose |
-|---|---|---|
-| `Trucks[ModelName]` | `Truck Model Detail` | Inspect one truck model |
-| `Dealers[DealerName]` | `Detail Tables` | Inspect dealer sales and service records |
-| `Customers[CustomerName]` | `Detail Tables` | Inspect customer sales and feedback records |
-| `Trucks[Plant]` | `Detail Tables` | Inspect plant-related truck activity |
-
-Always add a Back button to drill-through pages.
-
-## Visual Interaction Guidance
-
-Use default interactions first. Adjust only when needed.
-
-Recommended behavior:
-
-- Slicers should filter all visuals on the page.
-- Clicking a bar in a chart should filter or highlight related visuals.
-- Large detail tables can remain filtered by slicers and chart selections.
-- If a visual becomes confusing when cross-highlighted, change its interaction to Filter or None.
+Visual type: Clustered column chart
 
 Steps:
 
-1. Select a visual.
-2. Go to `Format` > `Edit interactions`.
-3. Choose Filter, Highlight, or None for each other visual.
-4. Test the page by selecting categories and clearing selections.
+1. Insert a Clustered column chart.
+2. Drag `Production[Plant]` to X-axis.
+3. Drag `Production[QuantityProduced]` to Y-axis.
+4. Set `QuantityProduced` to `Sum`.
+5. Add tooltips:
+   - `Production[ProductionID]`, Count
+   - `Production[ProductionCost]`, Sum
+   - `Production[ProductionCost]`, Average
+6. Sort descending by Sum of `QuantityProduced`.
+7. Title: `Quantity Produced by Plant`.
 
-## Optional Tooltip Pages
+Insight:
 
-Tooltip pages are optional. Use them only if the report needs extra hover detail.
+- Identify the plant with the most output.
 
-### Truck Tooltip
+## Visual 2: Production Cost by Plant
 
-Fields:
+Visual type: Clustered bar chart
 
-- `Trucks[ModelName]`
+Steps:
+
+1. Insert a Clustered bar chart.
+2. Drag `Production[Plant]` to Y-axis.
+3. Drag `Production[ProductionCost]` to X-axis.
+4. Set `ProductionCost` to `Sum`.
+5. Add tooltips:
+   - `Production[QuantityProduced]`, Sum
+   - `Production[ProductionCost]`, Average
+6. Sort descending by Sum of `ProductionCost`.
+7. Title: `Production Cost by Plant`.
+
+Insight:
+
+- Compare total cost with quantity produced.
+
+## Visual 3: Plant and Shift Matrix
+
+Visual type: Matrix
+
+Steps:
+
+1. Insert a Matrix visual.
+2. Drag `Production[Plant]` to Rows.
+3. Drag `Production[Shift]` to Columns.
+4. Drag `Production[QuantityProduced]` to Values and set to `Sum`.
+5. Drag `Production[ProductionCost]` to Values and set to `Sum`.
+6. Drag `Production[ProductionCost]` to Values again and set to `Average`.
+7. Apply conditional formatting to Average of `ProductionCost`:
+   - Low values: green
+   - High values: red
+8. Title: `Plant and Shift Production Matrix`.
+
+Insight:
+
+- Identify high-output and high-cost shift combinations.
+
+## Visual 4: Production by Machine Line
+
+Visual type: Stacked bar chart
+
+Steps:
+
+1. Insert a Stacked bar chart.
+2. Drag `Production[MachineUsed]` to Y-axis.
+3. Drag `Production[QuantityProduced]` to X-axis.
+4. Set `QuantityProduced` to `Sum`.
+5. Drag `Production[Shift]` to Legend.
+6. Add tooltip `Production[ProductionCost]`, Average.
+7. Title: `Production by Machine Line and Shift`.
+
+Insight:
+
+- Identify the busiest production line and which shift uses it most.
+
+## Visual 5: Production Quantity Trend
+
+Visual type: Line chart
+
+Steps:
+
+1. Insert a Line chart.
+2. Drag `DateTable[Date]` to X-axis.
+3. Drag `Production[QuantityProduced]` to Y-axis.
+4. Set `QuantityProduced` to `Sum`.
+5. Drag `Production[Plant]` to Legend.
+6. Turn on drill-down.
+7. Title: `Production Quantity Trend by Plant`.
+
+Insight:
+
+- Look for production increases, dips, or plant-level changes over time.
+
+## Visual 6: Truck Capacity vs Production Cost
+
+Visual type: Scatter chart
+
+Steps:
+
+1. Insert a Scatter chart.
+2. Drag `Trucks[CapacityTons]` to X-axis and set to `Average`.
+3. Drag `Production[ProductionCost]` to Y-axis and set to `Average`.
+4. Drag `Production[QuantityProduced]` to Size and set to `Sum`.
+5. Drag `Trucks[TruckType]` to Legend.
+6. Drag `Trucks[ModelName]` to Details.
+7. Add tooltip `Trucks[Plant]`.
+8. Add tooltip `Trucks[BasePrice]`, Average.
+9. Title: `Capacity vs Average Production Cost`.
+
+Insight:
+
+- Check whether higher-capacity trucks tend to cost more to produce.
+
+## Visual 7: Supervisor Production Table
+
+Visual type: Table
+
+Steps:
+
+1. Insert a Table visual.
+2. Add `Production[Supervisor]`.
+3. Add `Production[Plant]`.
+4. Add `Production[Shift]`.
+5. Add `Production[ProductionID]` and set to `Count`.
+6. Add `Production[QuantityProduced]` and set to `Sum`.
+7. Add `Production[ProductionCost]` and set to `Average`.
+8. Sort by Sum of `QuantityProduced` descending.
+9. Title: `Supervisor Production Summary`.
+
+Insight:
+
+- Identify supervisors associated with high output or high average cost.
+
+## Page 3 Required Insights
+
+Write short notes for these items:
+
+1. Plant with highest production quantity.
+2. Plant with highest total production cost.
+3. Shift with highest production quantity.
+4. Machine line with highest production quantity.
+5. Truck type with highest average production cost.
+6. Any visible production trend by year or quarter.
+
+# Report Page 4: Service and Feedback
+
+## Purpose
+
+This page connects service activity with customer feedback. It should show service cost, downtime, service scores, customer ratings, recommendation scores, and repeated customer comments.
+
+## Page Setup
+
+1. Create a new page.
+2. Rename it `Service and Feedback`.
+3. Place service slicers at the top left.
+4. Place feedback slicers at the top right.
+5. Place service visuals in the upper half.
+6. Place feedback visuals in the lower half.
+
+## Slicers
+
+Create these slicers:
+
+- `DateTable[Year]`
+- `Service[ServiceType]`
+- `Service[PartReplaced]`
 - `Trucks[TruckType]`
 - `Trucks[Plant]`
-- `Trucks[BasePrice]`
-- Sum of `Sales[SalePrice]`
-- Average of `CustomerFeedback[Rating]`
-- Average of `Service[ServiceCost]`
+- `Customers[IndustryType]`
+- `CustomerFeedback[Rating]`
 
-### Dealer Tooltip
+If you created optional `Service[Downtime Group]`, add it as a slicer too.
 
-Fields:
+## Visual 1: Service Events by Type
 
-- `Dealers[DealerName]`
+Visual type: Clustered column chart
+
+Steps:
+
+1. Insert a Clustered column chart.
+2. Drag `Service[ServiceType]` to X-axis.
+3. Drag `Service[ServiceID]` to Y-axis.
+4. Set `ServiceID` to `Count`.
+5. Add tooltips:
+   - `Service[ServiceCost]`, Average
+   - `Service[DowntimeDays]`, Average
+   - `Service[FeedbackScore]`, Average
+6. Title: `Service Events by Type`.
+
+Insight:
+
+- Identify the most common service type.
+
+## Visual 2: Service Cost by Part Replaced
+
+Visual type: Clustered bar chart
+
+Steps:
+
+1. Insert a Clustered bar chart.
+2. Drag `Service[PartReplaced]` to Y-axis.
+3. Drag `Service[ServiceCost]` to X-axis.
+4. Set `ServiceCost` to `Sum`.
+5. Add tooltips:
+   - `Service[ServiceID]`, Count
+   - `Service[ServiceCost]`, Average
+   - `Service[DowntimeDays]`, Average
+6. Sort descending by Sum of `ServiceCost`.
+7. Title: `Service Cost by Part Replaced`.
+
+Insight:
+
+- Identify the part that creates the highest service cost.
+
+## Visual 3: Downtime Distribution
+
+Visual type: Clustered column chart
+
+Steps:
+
+1. Insert a Clustered column chart.
+2. Drag `Service[DowntimeDays]` to X-axis.
+3. Drag `Service[ServiceID]` to Y-axis.
+4. Set `ServiceID` to `Count`.
+5. Drag `Service[ServiceType]` to Legend.
+6. Title: `Downtime Distribution by Service Type`.
+
+Insight:
+
+- Identify whether downtime is usually low or high.
+
+## Visual 4: Dealer Service Quality
+
+Visual type: Clustered bar chart
+
+Steps:
+
+1. Insert a Clustered bar chart.
+2. Drag `Dealers[DealerName]` to Y-axis.
+3. Drag `Service[FeedbackScore]` to X-axis.
+4. Set `FeedbackScore` to `Average`.
+5. Add tooltips:
+   - `Service[ServiceID]`, Count
+   - `Service[DowntimeDays]`, Average
+   - `Service[ServiceCost]`, Average
+6. Add a visual-level Top N filter:
+   - Filter `Dealers[DealerName]`.
+   - Choose Top N.
+   - Show Top 10 by Average of `Service[FeedbackScore]`.
+7. Duplicate this visual.
+8. Change the duplicate to Bottom 10 by Average of `Service[FeedbackScore]`.
+9. Title the visuals `Top 10 Dealer Service Scores` and `Bottom 10 Dealer Service Scores`.
+
+Insight:
+
+- Identify dealers with strong and weak service quality.
+
+## Visual 5: Average Rating by Truck Type
+
+Visual type: Clustered bar chart
+
+Steps:
+
+1. Insert a Clustered bar chart.
+2. Drag `Trucks[TruckType]` to Y-axis.
+3. Drag `CustomerFeedback[Rating]` to X-axis.
+4. Set `Rating` to `Average`.
+5. Add tooltips:
+   - `CustomerFeedback[FeedbackID]`, Count
+   - `CustomerFeedback[DeliverySatisfaction]`, Average
+   - `CustomerFeedback[SupportSatisfaction]`, Average
+   - `CustomerFeedback[LikelihoodToRecommend]`, Average
+6. Sort descending by Average of `Rating`.
+7. Title: `Average Rating by Truck Type`.
+
+Insight:
+
+- Identify the truck type with the best customer rating.
+
+## Visual 6: Satisfaction Matrix
+
+Visual type: Matrix
+
+Steps:
+
+1. Insert a Matrix visual.
+2. Drag `Trucks[Plant]` to Rows.
+3. Drag `Trucks[TruckType]` to Columns.
+4. Drag `CustomerFeedback[Rating]` to Values and set to `Average`.
+5. Drag `CustomerFeedback[DeliverySatisfaction]` to Values and set to `Average`.
+6. Drag `CustomerFeedback[SupportSatisfaction]` to Values and set to `Average`.
+7. Drag `CustomerFeedback[LikelihoodToRecommend]` to Values and set to `Average`.
+8. Apply conditional formatting to each score field:
+   - Low scores: red
+   - Medium scores: yellow
+   - High scores: green
+9. Title: `Satisfaction by Plant and Truck Type`.
+
+Insight:
+
+- Identify weak plant and truck type combinations.
+
+## Visual 7: Comment Summary
+
+Visual type: Table
+
+Steps:
+
+1. Insert a Table visual.
+2. Add `CustomerFeedback[Comments]`.
+3. Add `CustomerFeedback[FeedbackID]` and set to `Count`.
+4. Add `CustomerFeedback[Rating]` and set to `Average`.
+5. Add `CustomerFeedback[DeliverySatisfaction]` and set to `Average`.
+6. Add `CustomerFeedback[SupportSatisfaction]` and set to `Average`.
+7. Add `CustomerFeedback[LikelihoodToRecommend]` and set to `Average`.
+8. Sort by Average of `Rating` ascending to find weaker comments.
+9. Title: `Feedback Comments Summary`.
+
+Important:
+
+- Do not use sentiment analysis.
+- Do not use AI text features.
+- Treat each repeated comment as a normal category.
+
+## Page 4 Required Insights
+
+Write short notes for these items:
+
+1. Most common service type.
+2. Part with highest total service cost.
+3. Dealer with strongest service score.
+4. Dealer with weakest service score.
+5. Truck type with highest customer rating.
+6. Plant and truck type combination with weakest satisfaction.
+7. Comment category with lowest average rating.
+
+# Report Page 5: Dealer and Truck Detail
+
+## Purpose
+
+This page is the investigation page. It should allow users to inspect one dealer, one truck model, one plant, or one customer group in more detail. It combines ranked summaries and record-level tables.
+
+## Page Setup
+
+1. Create a new page.
+2. Rename it `Dealer and Truck Detail`.
+3. Add a Back button:
+   - Select `Insert` > `Buttons` > `Back`.
+   - Place it in the top-left corner.
+4. Add drill-through fields:
+   - In the Drill-through pane, add `Dealers[DealerName]`.
+   - Add `Trucks[ModelName]`.
+   - Add `Trucks[Plant]`.
+   - Add `Customers[IndustryType]`.
+5. Turn on `Keep all filters`.
+6. Place summary visuals at the top.
+7. Place detail tables at the bottom.
+
+## Slicers
+
+Create these slicers:
+
+- `DateTable[Year]`
 - `Dealers[Region]`
 - `Dealers[DealerType]`
-- Sum of `Sales[SalePrice]`
-- Count of `Sales[SaleID]`
-- Average of `Service[FeedbackScore]`
-- Average of `Service[DowntimeDays]`
+- `Trucks[TruckType]`
+- `Trucks[ModelName]`
+- `Customers[IndustryType]`
 
-## Formatting Standards
+## Visual 1: Dealer Leaderboard
 
-Use consistent formatting:
+Visual type: Table
 
-- Format `SalePrice`, `BasePrice`, `ProductionCost`, and `ServiceCost` as currency.
-- Format average scores with one or two decimal places.
-- Use display units such as Thousands or Millions for large currency charts.
-- Sort ranked bar charts descending by the main value.
-- Use conditional formatting in matrices for high and low values.
-- Keep visual titles clear and business-friendly.
-- Use consistent colors:
-  - Sales: blue
-  - Production: green
-  - Service: orange or red
-  - Feedback: teal or purple
-- Avoid too many colors in one visual.
-- Keep page layouts consistent.
+Steps:
 
-## Suggested Analysis Flow
+1. Insert a Table visual.
+2. Add `Dealers[DealerName]`.
+3. Add `Dealers[Region]`.
+4. Add `Dealers[DealerType]`.
+5. Add `Dealers[StaffCount]` and set to `Average`.
+6. Add `Sales[SalePrice]` and set to `Sum`.
+7. Add `Sales[SaleID]` and set to `Count`.
+8. Add `Sales[SalePrice]` again and set to `Average`.
+9. Add `Service[ServiceID]` and set to `Count`.
+10. Add `Service[FeedbackScore]` and set to `Average`.
+11. Add `Service[DowntimeDays]` and set to `Average`.
+12. Sort by Sum of `Sales[SalePrice]` descending.
+13. Title: `Dealer Sales and Service Leaderboard`.
 
-Use this flow when presenting the report:
+Insight:
 
-1. Start on `Executive Overview`.
-2. Select one year using the Year slicer.
-3. Identify the strongest truck type and region.
-4. Move to `Sales Analysis` to inspect channel, payment type, and top models.
-5. Move to `Production Analysis` to compare production with sales demand.
-6. Move to `Dealer and Region Analysis` to identify strong and weak dealers.
-7. Move to `Customer Analysis` to understand who is buying.
-8. Move to `Service Analysis` to inspect service cost and downtime.
-9. Move to `Feedback Analysis` to compare ratings and recommendation scores.
-10. Use drill-through or detail tables only when you need record-level investigation.
+- Find dealers with high revenue and strong service score.
+- Find dealers with high revenue but weak service score.
 
-## Final Insights to Produce
+## Visual 2: Revenue by Dealer Type
 
-Prepare a final written summary with these findings:
+Visual type: Clustered bar chart
 
-1. Top 3 truck types by sales revenue.
-2. Top 10 truck models by sales revenue.
-3. Best and weakest regions by sales revenue.
-4. Most common sales channel.
-5. Most common payment type.
-6. Plant with highest production quantity.
-7. Shift with highest production activity.
-8. Machine line with highest production quantity.
-9. Customer industry with highest sales revenue.
-10. Customer size group with highest sales revenue.
-11. Dealer with highest sales revenue.
-12. Dealer with lowest average service feedback score.
-13. Service type with most events.
-14. Part replaced with highest total service cost.
-15. Truck type with highest average customer rating.
-16. Repeated feedback comment with lowest average rating.
-17. Truck model that deserves further review because sales are high but rating or service score is weak.
-18. Recommended business actions based only on charts, slicers, filters, and drill-through.
+Steps:
 
-## Example Business Recommendations
+1. Insert a Clustered bar chart.
+2. Drag `Dealers[DealerType]` to Y-axis.
+3. Drag `Sales[SalePrice]` to X-axis.
+4. Set `SalePrice` to `Sum`.
+5. Add tooltips:
+   - `Sales[SaleID]`, Count
+   - `Sales[SalePrice]`, Average
+   - `Service[FeedbackScore]`, Average
+6. Title: `Revenue by Dealer Type`.
 
-Use the visuals to support practical recommendations such as:
+Insight:
 
-- Increase focus on truck types with high revenue and strong ratings.
-- Review production lines or shifts with high cost or low output.
-- Support dealers that sell well but have low service feedback scores.
-- Investigate parts that cause high service cost or downtime.
-- Improve delivery or support processes if satisfaction scores are weak.
-- Target customer industries that show high revenue and strong recommendation scores.
-- Review truck models that sell well but receive lower ratings.
+- Compare exclusive and multi-brand dealers.
 
-## Completion Checklist
+## Visual 3: Truck Model Summary Table
 
-Before submitting the report, confirm that:
+Visual type: Table
 
+Steps:
+
+1. Insert a Table visual.
+2. Add `Trucks[ModelName]`.
+3. Add `Trucks[TruckType]`.
+4. Add `Trucks[Plant]`.
+5. Add `Trucks[BasePrice]` and set to `Average`.
+6. Add `Trucks[CapacityTons]` and set to `Average`.
+7. Add `Sales[SalePrice]` and set to `Sum`.
+8. Add `Sales[SaleID]` and set to `Count`.
+9. Add `Production[QuantityProduced]` and set to `Sum`.
+10. Add `Service[ServiceID]` and set to `Count`.
+11. Add `Service[ServiceCost]` and set to `Average`.
+12. Add `CustomerFeedback[Rating]` and set to `Average`.
+13. Add `CustomerFeedback[LikelihoodToRecommend]` and set to `Average`.
+14. Sort by Sum of `Sales[SalePrice]` descending.
+15. Title: `Truck Model Performance Summary`.
+
+Insight:
+
+- Identify truck models with strong revenue and weak feedback.
+- Identify truck models with high service activity.
+
+## Visual 4: Sales Detail Table
+
+Visual type: Table
+
+Steps:
+
+1. Insert a Table visual.
+2. Add these columns:
+   - `Sales[SaleID]`
+   - `Sales[SaleDate]`
+   - `Trucks[ModelName]`
+   - `Trucks[TruckType]`
+   - `Customers[CustomerName]`
+   - `Customers[IndustryType]`
+   - `Dealers[DealerName]`
+   - `Sales[Region]`
+   - `Sales[SalePrice]`
+   - `Sales[PaymentType]`
+   - `Sales[SalesChannel]`
+3. Sort by `Sales[SaleDate]` descending.
+4. Title: `Sales Detail`.
+
+Use:
+
+- Inspect transactions after selecting a dealer, model, region, or customer industry.
+
+## Visual 5: Service Detail Table
+
+Visual type: Table
+
+Steps:
+
+1. Insert a Table visual.
+2. Add these columns:
+   - `Service[ServiceID]`
+   - `Service[ServiceDate]`
+   - `Trucks[ModelName]`
+   - `Trucks[TruckType]`
+   - `Dealers[DealerName]`
+   - `Service[ServiceType]`
+   - `Service[PartReplaced]`
+   - `Service[ServiceCost]`
+   - `Service[FeedbackScore]`
+   - `Service[DowntimeDays]`
+3. Sort by `Service[ServiceDate]` descending.
+4. Title: `Service Detail`.
+
+Use:
+
+- Inspect service records for the selected dealer or truck model.
+
+## Visual 6: Feedback Detail Table
+
+Visual type: Table
+
+Steps:
+
+1. Insert a Table visual.
+2. Add these columns:
+   - `CustomerFeedback[FeedbackID]`
+   - `CustomerFeedback[FeedbackDate]`
+   - `Customers[CustomerName]`
+   - `Customers[IndustryType]`
+   - `Trucks[ModelName]`
+   - `Trucks[TruckType]`
+   - `CustomerFeedback[Rating]`
+   - `CustomerFeedback[DeliverySatisfaction]`
+   - `CustomerFeedback[SupportSatisfaction]`
+   - `CustomerFeedback[LikelihoodToRecommend]`
+   - `CustomerFeedback[Comments]`
+3. Sort by `CustomerFeedback[FeedbackDate]` descending.
+4. Title: `Feedback Detail`.
+
+Use:
+
+- Inspect actual customer feedback rows after filtering by model, plant, truck type, or industry.
+
+## Drill-through Setup from Other Pages
+
+Create drill-through access into Page 5.
+
+### From Page 2: Top Truck Models by Revenue
+
+1. Go to `Sales and Customers`.
+2. Right-click a truck model in `Top 10 Truck Models by Revenue`.
+3. Select Drill through > `Dealer and Truck Detail`.
+4. Confirm Page 5 opens filtered to that truck model.
+
+### From Page 2: Revenue by Customer Industry
+
+1. Right-click an industry in `Revenue by Customer Industry`.
+2. Select Drill through > `Dealer and Truck Detail`.
+3. Confirm Page 5 opens filtered to that industry.
+
+### From Page 3: Quantity Produced by Plant
+
+1. Right-click a plant in `Quantity Produced by Plant`.
+2. Select Drill through > `Dealer and Truck Detail`.
+3. Confirm Page 5 opens filtered to that plant.
+
+### From Page 4: Dealer Service Quality
+
+1. Right-click a dealer in the Top 10 or Bottom 10 dealer service score visual.
+2. Select Drill through > `Dealer and Truck Detail`.
+3. Confirm Page 5 opens filtered to that dealer.
+
+## Page 5 Required Insights
+
+Write short notes for these items:
+
+1. Dealer with highest revenue.
+2. Dealer with high revenue but low service score.
+3. Truck model with highest revenue.
+4. Truck model with high service cost or frequent service events.
+5. Truck model with weak customer rating.
+6. Customer industry with the most visible sales records after filtering.
+
+# Interaction and Formatting Steps
+
+## Configure Slicer Behavior
+
+For each page:
+
+1. Select a slicer.
+2. Go to `Format` > `Edit interactions`.
+3. Confirm the slicer filters every main visual on the page.
+4. If a detail table becomes too slow or cluttered, leave it filtered but avoid using highlight mode.
+
+## Configure Drill-down on Date Charts
+
+For each date trend visual:
+
+1. Select the visual.
+2. Confirm `DateTable[Date]` is on the X-axis.
+3. Use the visual header drill icons.
+4. Drill from Year to Quarter to Month.
+5. Do not drill to individual day unless needed.
+
+## Apply Number Formatting
+
+Apply these formats:
+
+- `Sales[SalePrice]`: Currency
+- `Trucks[BasePrice]`: Currency
+- `Production[ProductionCost]`: Currency
+- `Service[ServiceCost]`: Currency
+- Rating and score fields: 1 or 2 decimal places when averaged
+- Count fields: Whole number
+
+## Apply Conditional Formatting
+
+Use conditional formatting in matrices and tables:
+
+1. Select the matrix or table.
+2. In Values, open the dropdown for the score or cost field.
+3. Select `Conditional formatting`.
+4. Choose `Background color`.
+5. For scores:
+   - Low = red
+   - Middle = yellow
+   - High = green
+6. For costs and downtime:
+   - Low = green
+   - Middle = yellow
+   - High = red
+
+## Final Report Summary to Write
+
+At the end of the analysis, write a short business summary with these exact sections:
+
+### Sales Summary
+
+Include:
+
+- Best region by sales revenue.
+- Best truck type by sales revenue.
+- Top truck model by sales revenue.
+- Most common sales channel.
+- Most common payment type.
+
+### Customer Summary
+
+Include:
+
+- Best customer industry by revenue.
+- Best company size by revenue.
+- Whether larger fleets appear to produce higher sales.
+
+### Production Summary
+
+Include:
+
+- Plant with highest production quantity.
+- Plant with highest production cost.
+- Most active shift.
+- Most active machine line.
+
+### Service Summary
+
+Include:
+
+- Most common service type.
+- Part with highest total service cost.
+- Dealer with strongest average service score.
+- Dealer with weakest average service score.
+
+### Feedback Summary
+
+Include:
+
+- Truck type with highest average customer rating.
+- Plant and truck type combination with weakest satisfaction.
+- Comment category with lowest average rating.
+
+### Management Actions
+
+Recommend 3 to 5 actions based only on the visuals. Examples:
+
+- Increase focus on high-revenue truck types with strong ratings.
+- Investigate high-revenue truck models with weak ratings or high service cost.
+- Review dealers with high sales but weak service score.
+- Study plants or shifts with high production cost.
+- Improve delivery, support, or service processes when satisfaction scores are low.
+
+# Completion Checklist
+
+Before submitting the Power BI case study, confirm:
+
+- The report has exactly 5 pages.
+- The page names are exactly:
+  - `Executive Overview`
+  - `Sales and Customers`
+  - `Production Operations`
+  - `Service and Feedback`
+  - `Dealer and Truck Detail`
 - All 8 CSV files are loaded.
 - Data types are correct.
-- Relationships are active and one-to-many where expected.
+- Relationships are created and active.
 - `DateTable` is marked as the date table.
-- Report pages use visual aggregations instead of complex DAX measures.
-- Optional calculated columns, if used, are simple and easy to explain.
-- Slicers work correctly.
-- Drill-down works on date visuals.
-- Drill-through pages work if included.
-- Tables and matrices use clear sorting and conditional formatting.
-- Each page answers at least one business question.
-- Final insights are based only on visualization, slicing, filtering, drill-down, and drill-through.
+- No complex DAX measure table is used.
+- Optional calculated columns, if used, are simple and understandable.
+- Every chart uses clear field placement and aggregation.
+- Slicers filter the visuals correctly.
+- Date drill-down works on trend charts.
+- Drill-through to Page 5 works from at least 3 source visuals.
+- Tables are sorted clearly.
+- Conditional formatting is applied to score, cost, or downtime fields where useful.
+- The final written insights are based only on visuals, slicers, filters, drill-down, and drill-through.
